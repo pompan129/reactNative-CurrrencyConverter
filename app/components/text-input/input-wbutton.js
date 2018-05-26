@@ -8,7 +8,9 @@ import Styles from './styles';
 const InputWithButton = (props) => {
   const { onPress, buttonText, editable = true } = props;
   const containerStyles = [Styles.container];
-  const underlayColor = 'green';
+  // prettier-ignore
+  const underlayColor = Color(Styles.$buttonBackgroundColor)
+    .darken(Styles.$buttonBackgroundColorModifier);
 
   if (editable === false) {
     containerStyles.push(Styles.containerDisabled);
