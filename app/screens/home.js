@@ -5,6 +5,7 @@ import { Logo } from '../components/logo';
 import { InputWithButton } from '../components/text-input';
 import { ClearButton } from '../components/button';
 import { LastConverted } from '../components/text';
+import { Header } from '../components/header';
 
 const TEMP_BASE_CURRENCY = 'USD';
 const TEMP_QUOTE_CURRENCY = 'GPB';
@@ -14,24 +15,29 @@ const TEMP_CONVERSION_RATE = 0.7975;
 const TEMP_CONVERSION_DATE = new Date();
 
 class Home extends React.Component {
-  handleTextChange(text) {
+  handleTextChange = (text) => {
     console.log('change Text', text);
-  }
-  handlePressQuoteCurrency() {
+  };
+  handlePressQuoteCurrency = () => {
     console.log('press quote');
-  }
-  handlePressBaseCurrency() {
+  };
+  handlePressBaseCurrency = () => {
     console.log('press base');
-  }
+  };
 
-  handleSwapCurrency() {
+  handleSwapCurrency = () => {
     console.log('press SwapCurrency');
-  }
+  };
+
+  handleOptionsPress = () => {
+    console.log('press Options');
+  };
 
   render() {
     return (
       <Container>
         <StatusBar translucent={false} barStyle="light-content" />
+        <Header onPress={this.handleOptionsPress} />
         <Logo />
         <InputWithButton
           buttonText={TEMP_BASE_CURRENCY}

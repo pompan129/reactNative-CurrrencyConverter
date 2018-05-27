@@ -8,6 +8,8 @@ EStyleSheet.build({
   $border: '#e2e2e2',
   $inputText: '#797979',
   $disabled: '#f2f2f2',
+
+  //  $outline: 1, // // TODO:
 });
 
 export default () => <Home />;
