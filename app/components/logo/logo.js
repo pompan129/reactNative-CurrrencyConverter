@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, Image, ImageBackground, Keyboard, Animated, StyleSheet } from 'react-native';
+import { View, Text, Image, Keyboard, Animated, StyleSheet, Platform } from 'react-native';
 import Styles from './styles';
 
 const ANIMATION_DURATION = 250;
@@ -11,37 +11,42 @@ class Logo extends React.Component {
     this.imageWidth = new Animated.Value(Styles.$largeImageSize);
   }
   componentDidMount() {
-    this.keyboardShowListener = Keyboard.addListener('keyboardDidShow', this.keyboardShow);
-    this.keyboardHideListener = Keyboard.addListener('keyboardDidHide', this.keyboardHide);
+    let showListener = 'keyboardWillShow';
+    let hideListener = 'keyboardWillHide';
+    if (Platform.OS === 'android') {
+      showListener = 'keyboardDidShow';
+      hideListener = 'keyboardDidHide';
+    }
+    this.keyboardShowListener = Keyboard.addListener(showListener, this.keyboardShow);
+    this.keyboardHideListener = Keyboard.addListener(hideListener, this.keyboardHide);
   }
   componentWillUnmount() {
     this.keyboardShowListener.remove();
     this.keyboardHideListener.remove();
   }
   keyboardShow = () => {
-    Animated.timing(this.imageWidth, {
-      toValue: Styles.$smallImageSize,
-      duration: ANIMATION_DURATION,
-    }).start();
-
-    Animated.timing(this.containerImageWidth, {
-      toValue: Styles.$smallContainerSize,
-      duration: ANIMATION_DURATION,
-    }).start();
-
-    /* Animated.parallel([
+    Animated.parallel([
+      Animated.timing(this.imageWidth, {
+        toValue: Styles.$smallImageSize,
+        duration: ANIMATION_DURATION,
+      }),
       Animated.timing(this.containerImageWidth, {
         toValue: Styles.$smallContainerSize,
         duration: ANIMATION_DURATION,
       }),
-      Animated.timing(this.ImageWidth, {
-        toValue: Styles.$smallImageSize,
-        duration: ANIMATION_DURATION,
-      }),
-    ]).start(); */
+    ]).start();
   };
   keyboardHide = () => {
-    console.log('keyboard did hide');
+    Animated.parallel([
+      Animated.timing(this.imageWidth, {
+        toValue: Styles.$largeImageSize,
+        duration: ANIMATION_DURATION,
+      }),
+      Animated.timing(this.containerImageWidth, {
+        toValue: Styles.$largeContainerSize,
+        duration: ANIMATION_DURATION,
+      }),
+    ]).start();
   };
   render() {
     const containerImageStyle = [
