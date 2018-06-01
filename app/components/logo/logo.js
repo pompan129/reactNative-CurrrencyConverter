@@ -1,6 +1,8 @@
 import React from 'react';
-import { View, Text, Image, ImageBackground, Keyboard, Animated } from 'react-native';
+import { View, Text, Image, ImageBackground, Keyboard, Animated, StyleSheet } from 'react-native';
 import Styles from './styles';
+
+const ANIMATION_DURATION = 250;
 
 class Logo extends React.Component {
   constructor(props) {
@@ -17,7 +19,26 @@ class Logo extends React.Component {
     this.keyboardHideListener.remove();
   }
   keyboardShow = () => {
-    console.log('keyboard did show');
+    Animated.timing(this.imageWidth, {
+      toValue: Styles.$smallImageSize,
+      duration: ANIMATION_DURATION,
+    }).start();
+
+    Animated.timing(this.containerImageWidth, {
+      toValue: Styles.$smallContainerSize,
+      duration: ANIMATION_DURATION,
+    }).start();
+
+    /* Animated.parallel([
+      Animated.timing(this.containerImageWidth, {
+        toValue: Styles.$smallContainerSize,
+        duration: ANIMATION_DURATION,
+      }),
+      Animated.timing(this.ImageWidth, {
+        toValue: Styles.$smallImageSize,
+        duration: ANIMATION_DURATION,
+      }),
+    ]).start(); */
   };
   keyboardHide = () => {
     console.log('keyboard did hide');
@@ -30,17 +51,18 @@ class Logo extends React.Component {
     const imageStyle = [Styles.logo, { width: this.imageWidth }];
     return (
       <View style={Styles.container}>
-        <Animated.Image
-          style={containerImageStyle}
-          resizeMode="contain"
-          source={require('./images/background.png')}
-        />
-        <Animated.Image
-          resizeMode="contain"
-          style={imageStyle}
-          source={require('./images/logo.png')}
-        />
-
+        <Animated.View style={containerImageStyle}>
+          <Animated.Image
+            style={[StyleSheet.absoluteFill, containerImageStyle]}
+            resizeMode="contain"
+            source={require('./images/background.png')}
+          />
+          <Animated.Image
+            resizeMode="contain"
+            style={imageStyle}
+            source={require('./images/logo.png')}
+          />
+        </Animated.View>
         <Text style={Styles.text}>Currency Converter</Text>
       </View>
     );
