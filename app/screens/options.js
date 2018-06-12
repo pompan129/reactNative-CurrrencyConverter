@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Ionicons } from '@expo/vector-icons';
-import { ScrollView, StatusBar, Platform } from 'react-native';
+import { ScrollView, StatusBar, Platform, Linking } from 'react-native';
 import { ListItem, Seperator } from '../components/list';
 
 const ICON_COLOR = '#868686';
@@ -17,7 +17,9 @@ class Options extends React.Component {
     this.props.navigation.navigate('Themes');
   };
   handleSitePress = () => {
-    console.log('press site');
+    Linking.openURL('http://fixer.io').catch(() => {
+      alert('an error occured');
+    });
   };
 
   render() {
