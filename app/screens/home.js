@@ -7,6 +7,7 @@ import { InputWithButton } from '../components/text-input';
 import { ClearButton } from '../components/button';
 import { LastConverted } from '../components/text';
 import { Header } from '../components/header';
+import { swapCurrency, changeCurrencyAmount } from '../actions/currencies';
 
 const TEMP_BASE_CURRENCY = 'USD';
 const TEMP_QUOTE_CURRENCY = 'GPB';
@@ -19,8 +20,8 @@ class Home extends React.Component {
   static propTypes = {
     navigation: PropTypes.object,
   };
-  handleTextChange = (text) => {
-    console.log('change Text', text);
+  handleTextChange = (amount) => {
+    console.log(changeCurrencyAmount(amount));
   };
   handlePressQuoteCurrency = () => {
     console.log('press quote'); // // TODO
@@ -32,7 +33,7 @@ class Home extends React.Component {
   };
 
   handleSwapCurrency = () => {
-    console.log('press SwapCurrency');
+    console.log(swapCurrency());
   };
 
   handleOptionsPress = () => {
