@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { StatusBar, KeyboardAvoidingView, Text } from 'react-native';
+import { StatusBar, KeyboardAvoidingView } from 'react-native';
 import { connect } from 'react-redux';
 
 import { Container } from '../components/container';
@@ -73,7 +73,6 @@ class Home extends React.Component {
           />
           <ClearButton text="Reverse Currency" onPress={this.handleSwapCurrency} />
         </KeyboardAvoidingView>
-        <Text>{this.props.currencies.amount}</Text>
       </Container>
     );
   }
