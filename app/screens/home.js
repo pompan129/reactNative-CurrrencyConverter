@@ -1,6 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { StatusBar, KeyboardAvoidingView } from 'react-native';
+import { StatusBar, KeyboardAvoidingView, Text } from 'react-native';
+import { connect } from 'react-redux';
+
 import { Container } from '../components/container';
 import { Logo } from '../components/logo';
 import { InputWithButton } from '../components/text-input';
@@ -19,9 +21,10 @@ const TEMP_CONVERSION_DATE = new Date();
 class Home extends React.Component {
   static propTypes = {
     navigation: PropTypes.object,
+    dispatch: PropTypes.func,
   };
   handleTextChange = (amount) => {
-    console.log(changeCurrencyAmount(amount));
+    this.props.dispatch(changeCurrencyAmount(amount));
   };
   handlePressQuoteCurrency = () => {
     console.log('press quote'); // // TODO
@@ -33,7 +36,7 @@ class Home extends React.Component {
   };
 
   handleSwapCurrency = () => {
-    console.log(swapCurrency());
+    this.props.dispatch(swapCurrency());
   };
 
   handleOptionsPress = () => {
@@ -42,6 +45,7 @@ class Home extends React.Component {
   };
 
   render() {
+    console.log('Home store=', this.props.currencies);
     return (
       <Container>
         <StatusBar translucent={false} barStyle="light-content" />
@@ -69,9 +73,15 @@ class Home extends React.Component {
           />
           <ClearButton text="Reverse Currency" onPress={this.handleSwapCurrency} />
         </KeyboardAvoidingView>
+        <Text>{this.props.currencies.amount}</Text>
       </Container>
     );
   }
 }
 
-export default Home;
+function mapStateToProps({ currencies }) {
+  // todo all needed?
+  return { currencies };
+}
+
+export default connect(mapStateToProps)(Home);
