@@ -11,9 +11,6 @@ import { LastConverted } from '../components/text';
 import { Header } from '../components/header';
 import { swapCurrency, changeCurrencyAmount } from '../actions/currencies';
 
-const TEMP_BASE_CURRENCY = 'USD';
-const TEMP_QUOTE_CURRENCY = 'GPB';
-const TEMP_BASE_PRICE = '100';
 const TEMP_QUOTE_PRICE = '79.75';
 const TEMP_CONVERSION_RATE = 0.7975;
 const TEMP_CONVERSION_DATE = new Date();
@@ -22,6 +19,12 @@ class Home extends React.Component {
   static propTypes = {
     navigation: PropTypes.object,
     dispatch: PropTypes.func,
+    baseCurrency: PropTypes.string,
+    quoteCurrency: PropTypes.string,
+    amount: PropTypes.number,
+    conversionRate: PropTypes.number,
+    isFetching: PropTypes.bool,
+    conversionDate: PropTypes.object,
   };
   handleTextChange = (amount) => {
     this.props.dispatch(changeCurrencyAmount(amount));
@@ -45,7 +48,10 @@ class Home extends React.Component {
   };
 
   render() {
-    console.log('Home store=', this.props.currencies);
+    let quotePrice = (this.props.amount * this.props.conversionRate).toFixed(2);
+    if (this.props.isFetching) {
+      quotePrice = '...';
+    }
     return (
       <Container>
         <StatusBar translucent={false} barStyle="light-content" />
@@ -53,23 +59,23 @@ class Home extends React.Component {
         <KeyboardAvoidingView behavior="padding">
           <Logo />
           <InputWithButton
-            buttonText={TEMP_BASE_CURRENCY}
+            buttonText={this.props.baseCurrency}
             onPress={this.handlePressBaseCurrency}
-            defaultValue={TEMP_BASE_PRICE}
+            defaultValue={this.props.amount.toString()}
             keyboardType="numeric"
             onChangeText={this.handleTextChange}
           />
           <InputWithButton
-            buttonText={TEMP_QUOTE_CURRENCY}
+            buttonText={this.props.quoteCurrency}
             onPress={this.handlePressQuoteCurrency}
             editable={false}
-            defaultValue={TEMP_QUOTE_PRICE}
+            defaultValue={quotePrice.toString()}
           />
           <LastConverted
-            date={TEMP_CONVERSION_DATE}
-            quote={TEMP_QUOTE_CURRENCY}
-            base={TEMP_BASE_CURRENCY}
-            conversionRate={TEMP_CONVERSION_RATE}
+            date={this.props.conversionDate}
+            quote={this.props.quoteCurrency}
+            base={this.props.baseCurrency}
+            conversionRate={this.props.conversionRate}
           />
           <ClearButton text="Reverse Currency" onPress={this.handleSwapCurrency} />
         </KeyboardAvoidingView>
@@ -79,8 +85,18 @@ class Home extends React.Component {
 }
 
 function mapStateToProps({ currencies }) {
-  // todo all needed?
-  return { currencies };
+  const { baseCurrency, quoteCurrency, amount } = currencies;
+  const conversionSelector = currencies.conversions[currencies.baseCurrency] || {};
+  const rates = conversionSelector.rates || {};
+  const conversionDate = conversionSelector.date ? new Date(conversionSelector.date) : new Date();
+  return {
+    baseCurrency,
+    quoteCurrency,
+    amount,
+    conversionRate: rates[quoteCurrency] || 0,
+    isFetching: conversionSelector.isFetching,
+    conversionDate,
+  };
 }
 
 export default connect(mapStateToProps)(Home);
