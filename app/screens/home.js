@@ -11,10 +11,6 @@ import { LastConverted } from '../components/text';
 import { Header } from '../components/header';
 import { swapCurrency, changeCurrencyAmount } from '../actions/currencies';
 
-const TEMP_QUOTE_PRICE = '79.75';
-const TEMP_CONVERSION_RATE = 0.7975;
-const TEMP_CONVERSION_DATE = new Date();
-
 class Home extends React.Component {
   static propTypes = {
     navigation: PropTypes.object,
@@ -31,11 +27,11 @@ class Home extends React.Component {
   };
   handlePressQuoteCurrency = () => {
     console.log('press quote'); // // TODO
-    this.props.navigation.navigate('CurrencyList', { title: 'Quote Currency' });
+    this.props.navigation.navigate('CurrencyList', { title: 'Quote Currency', type: 'quote' });
   };
   handlePressBaseCurrency = () => {
     console.log('press base'); // TODO:
-    this.props.navigation.navigate('CurrencyList', { title: 'Base Currency' });
+    this.props.navigation.navigate('CurrencyList', { title: 'Base Currency', type: 'base' });
   };
 
   handleSwapCurrency = () => {
@@ -52,6 +48,7 @@ class Home extends React.Component {
     if (this.props.isFetching) {
       quotePrice = '...';
     }
+    console.log('home.js props: ', this.props);
     return (
       <Container>
         <StatusBar translucent={false} barStyle="light-content" />

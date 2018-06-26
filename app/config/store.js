@@ -5,6 +5,7 @@ import reducers from '../reducers';
 const middleware = [];
 if (process.env.NODE_ENV === 'development') {
   middleware.push(logger);
+  console.log('---logger logging');
 }
 
 export default createStore(reducers, applyMiddleware(...middleware));
