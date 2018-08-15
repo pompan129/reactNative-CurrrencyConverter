@@ -21,6 +21,7 @@ class Home extends React.Component {
     conversionRate: PropTypes.number,
     isFetching: PropTypes.bool,
     conversionDate: PropTypes.object,
+    primaryColor: PropTypes.string,
   };
   handleTextChange = (amount) => {
     this.props.dispatch(changeCurrencyAmount(amount));
@@ -50,23 +51,25 @@ class Home extends React.Component {
     }
     console.log('home.js props: ', this.props);
     return (
-      <Container>
+      <Container backgroundColor={this.props.primaryColor}>
         <StatusBar translucent={false} barStyle="light-content" />
         <Header onPress={this.handleOptionsPress} />
         <KeyboardAvoidingView behavior="padding">
-          <Logo />
+          <Logo tintColor={this.props.primaryColor} />
           <InputWithButton
             buttonText={this.props.baseCurrency}
             onPress={this.handlePressBaseCurrency}
             defaultValue={this.props.amount.toString()}
             keyboardType="numeric"
             onChangeText={this.handleTextChange}
+            textColor={this.props.primaryColor}
           />
           <InputWithButton
             buttonText={this.props.quoteCurrency}
             onPress={this.handlePressQuoteCurrency}
             editable={false}
             defaultValue={quotePrice.toString()}
+            textColor={this.props.primaryColor}
           />
           <LastConverted
             date={this.props.conversionDate}
@@ -81,7 +84,8 @@ class Home extends React.Component {
   }
 }
 
-function mapStateToProps({ currencies }) {
+function mapStateToProps(state) {
+  const { currencies, theme } = state;
   const { baseCurrency, quoteCurrency, amount } = currencies;
   const conversionSelector = currencies.conversions[currencies.baseCurrency] || {};
   const rates = conversionSelector.rates || {};
@@ -93,6 +97,7 @@ function mapStateToProps({ currencies }) {
     conversionRate: rates[quoteCurrency] || 0,
     isFetching: conversionSelector.isFetching,
     conversionDate,
+    primaryColor: theme.primaryColor,
   };
 }
 
