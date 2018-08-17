@@ -9,7 +9,7 @@ import { InputWithButton } from '../components/text-input';
 import { ClearButton } from '../components/button';
 import { LastConverted } from '../components/text';
 import { Header } from '../components/header';
-import { swapCurrency, changeCurrencyAmount } from '../actions/currencies';
+import { swapCurrency, changeCurrencyAmount, getInitialConversion } from '../actions/currencies';
 
 class Home extends React.Component {
   static propTypes = {
@@ -23,6 +23,11 @@ class Home extends React.Component {
     conversionDate: PropTypes.object,
     primaryColor: PropTypes.string,
   };
+
+  componentWillMount() {
+    this.props.dispatch(getInitialConversion());
+  }
+
   handleTextChange = (amount) => {
     this.props.dispatch(changeCurrencyAmount(amount));
   };
