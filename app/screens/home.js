@@ -9,6 +9,7 @@ import { InputWithButton } from '../components/text-input';
 import { ClearButton } from '../components/button';
 import { LastConverted } from '../components/text';
 import { Header } from '../components/header';
+import { ConnectAlert } from '../components/alert';
 import { swapCurrency, changeCurrencyAmount, getInitialConversion } from '../actions/currencies';
 
 class Home extends React.Component {
@@ -22,10 +23,18 @@ class Home extends React.Component {
     isFetching: PropTypes.bool,
     conversionDate: PropTypes.object,
     primaryColor: PropTypes.string,
+    alertWithType: PropTypes.func,
+    currencyError: PropTypes.string,
   };
 
   componentWillMount() {
     this.props.dispatch(getInitialConversion());
+  }
+
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.currencyError && nextProps.currencyError !== this.props.currencyError) {
+      this.props.alertWithType('error', 'Error', nextProps.currencyError);
+    }
   }
 
   handleTextChange = (amount) => {
@@ -54,7 +63,7 @@ class Home extends React.Component {
     if (this.props.isFetching) {
       quotePrice = '...';
     }
-    console.log('home.js props: ', this.props);
+    console.log('home.js props: ===========================================>', this.props);
     return (
       <Container backgroundColor={this.props.primaryColor}>
         <StatusBar translucent={false} barStyle="light-content" />
@@ -103,7 +112,8 @@ function mapStateToProps(state) {
     isFetching: conversionSelector.isFetching,
     conversionDate,
     primaryColor: theme.primaryColor,
+    currencyError: currencies.error,
   };
 }
 
-export default connect(mapStateToProps)(Home);
+export default connect(mapStateToProps)(ConnectAlert(Home));
